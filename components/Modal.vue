@@ -6,7 +6,7 @@
       @keydown.esc="closeModal"
       @click:outside="closeModal"
     >
-      <v-card>
+      <v-card :loading="loading_modal">
         <v-card-title>
           <span class="headline">{{ title_modal }}</span>
         </v-card-title>
@@ -14,11 +14,8 @@
         <Sectors v-else-if="name_modal === 'sectors'" />
         <Partners v-else-if="name_modal === 'partners'" />
         <Ads v-else-if="name_modal === 'ads'" />
-        <AddWork v-else-if="name_modal === 'add_work'" />
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="error" text @click="closeModal">Kapat</v-btn>
-        </v-card-actions>
+        <!-- eslint-disable vue/attribute-hyphenation -->
+        <AddWork v-else-if="name_modal === 'add_work'" :work="selected_work" />
       </v-card>
     </v-dialog>
   </v-row>
@@ -27,6 +24,7 @@
 <script>
 import { mapState } from 'vuex'
 
+import { handleLoading, selectWork } from '../store'
 import Locations from '@/components/Locations'
 import Sectors from '@/components/Sectors'
 import Partners from '@/components/Partners'
@@ -44,7 +42,7 @@ export default {
     toggle: Boolean
   },
   computed: {
-    ...mapState(['title_modal', 'name_modal'])
+    ...mapState(['title_modal', 'name_modal', 'loading_modal', 'selected_work'])
   },
   methods: {
     closeModal() {
@@ -53,6 +51,8 @@ export default {
         name: null,
         title: null
       })
+      this.$store.commit(handleLoading, { name: 'modal', value: false })
+      this.$store.commit(selectWork, undefined)
     }
   }
 }
