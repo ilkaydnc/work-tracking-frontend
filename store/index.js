@@ -1,10 +1,14 @@
 import { firstDayOfMount, formatDate, sortDates } from '@/utils/date'
+import graphqlClient from '~/graphql'
+import { GET_DATA } from '~/graphql/queries'
 
 export const setLocations = 'SET_LOCATIONS'
 export const setSectors = 'SET_SECTORS'
 export const setPartners = 'SET_PARTNERS'
 export const setAds = 'SET_ADS'
 export const setWorks = 'SET_WORKS'
+export const setRawData = 'SET_RAW_DATA'
+export const selectWork = 'SELECT_WORK'
 
 export const handleDatePicker = 'HANDLE_DATE_PICKER'
 export const handleSelect = 'HANDLE_SELECT'
@@ -13,34 +17,42 @@ export const handleLoading = 'HANDLE_LOADING'
 export const handleError = 'HANDLE_ERROR'
 
 export const state = () => ({
-  locations: ['mersin', 'istanbul'],
-  partners: ['ahmet', 'mehmet'],
-  sectors: ['klima', 'elektrik'],
+  partners: [],
+  locations: [],
+  sectors: [],
   works: [],
   ads: [],
-  selected_dates: [
+  filter_dates: [
     firstDayOfMount()
       .toISOString()
       .substr(0, 10),
     new Date().toISOString().substr(0, 10)
   ],
+  filter_location: undefined,
+  filter_partner: undefined,
+  filter_sector: undefined,
+  selected_work: undefined,
   toggle_modal: false,
   title_modal: 'asdasd',
   name_modal: 'locations',
   loading_datatable: false,
-  error_message: null,
+  loading_modal: false,
+  error_message: null
 })
 
 export const getters = {
   date_range_text: (state) => {
     const newDates = []
-    return sortDates(newDates.concat(state.selected_dates))
+    return sortDates(newDates.concat(state.filter_dates))
       .map((date) => formatDate(date))
       .join(' ~ ')
   }
 }
 
 export const mutations = {
+  [setRawData]: (state, payload) => {
+    state[payload.name] = payload.value
+  },
   [setLocations]: (state, payload) => {
     state.locations = payload
   },
@@ -54,10 +66,13 @@ export const mutations = {
     state.works = payload
   },
   [handleDatePicker]: (state, payload) => {
-    state.selected_dates = sortDates(payload)
+    state.filter_dates = sortDates(payload)
   },
   [handleSelect]: (state, payload) => {
-    state['selected_' + payload.name] = payload.value
+    state['filter_' + payload.name] = payload.value
+  },
+  [selectWork]: (state, payload) => {
+    state.selected_work = payload
   },
   [toggleModal]: (state, payload) => {
     const { value, name, title } = payload
@@ -70,19 +85,12 @@ export const mutations = {
   },
   [handleError]: (state, payload) => {
     state.error_message = payload
-  },
-  [handleForm]: (state, payload) => {
-    const { value, name, key } = payload
-
-    state[name + '_form'] = { ...state[name + '_form'], [key]: value }
   }
 }
 
 export const actions = {
   async handleSelect({ dispatch, commit }, payload) {
     commit(handleSelect, payload)
-    await dispatch('getWorks')
-  },
     await dispatch('getData')
   },
   async getPartners({ commit }) {
@@ -93,11 +101,36 @@ export const actions = {
     const ads = await API.get('/ads')
     commit(setAds, ads)
   },
-  async getWorks({ state, getters, commit }) {
+  async getData({ state, commit }) {
     commit(handleLoading, { name: 'datatable', value: true })
+    commit(setWorks, [])
+    commit(setPartners, [])
+    commit(setLocations, [])
+    commit(setSectors, [])
+
     try {
+      const {
+        data: { works, partners, locations, sectors }
+      } = await graphqlClient.query({
+        query: GET_DATA,
+        variables: {
+          filterWorksInput: {
+            partnerId: state.filter_partner,
+            locationId: state.filter_location,
+            sectorId: state.filter_sector,
+            startDate: state.filter_dates[0],
+            endDate: state.filter_dates[1] || state.filter_dates[0]
+          }
+        },
+        fetchPolicy: 'network-only'
       })
-      commit(setWorks, works)
+      commit(
+        setWorks,
+        works.map((item, index) => ({ ...item, index: index + 1 }))
+      )
+      commit(setPartners, partners)
+      commit(setLocations, locations)
+      commit(setSectors, sectors)
     } catch (error) {
       commit(handleError, error.message)
     }
