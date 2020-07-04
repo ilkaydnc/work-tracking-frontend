@@ -91,11 +91,6 @@ export const actions = {
   },
   async getData({ state, commit }) {
     commit(handleLoading, { name: 'datatable', value: true })
-    commit(setWorks, [])
-    commit(setPartners, [])
-    commit(setLocations, [])
-    commit(setSectors, [])
-
     try {
       const {
         data: { works, partners, locations, sectors }
