@@ -62,7 +62,7 @@ export default {
     ])
   },
   mounted() {
-    this.$store.dispatch('getWorks')
+    this.$store.dispatch('getData')
   },
   methods: {
     dismissError() {
