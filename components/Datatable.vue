@@ -7,59 +7,84 @@
     :items="works"
     no-data-text="Yüklenebilecek veri yok."
   >
-    <template v-slot:item.calories="{ item }">
-      <v-chip color="purple" dark>{{ item.calories }}</v-chip>
+    <template v-slot:item.id="{ item }">
+      <span>{{ works.map((w) => w.id === item.id).indexOf(item.id) }} </span>
+    </template>
+    <template v-slot:item.date="{ item }">
+      <span>{{ formatDate(item.date) }}</span>
+    </template>
+    <template v-slot:item.amount="{ item }">
+      <span>{{ item.amount }} TL</span>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <span>
+        <v-btn
+          depressed
+          class="mx-2"
+          fab
+          small
+          icon
+          color="primary"
+          @click="editWork('add_work', 'İş Düzenle', item)"
+        >
+          <v-icon dark>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn depressed class="mx-2" fab small icon color="error">
+          <v-icon dark>mdi-delete</v-icon>
+        </v-btn>
+      </span>
     </template>
   </v-data-table>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { formatDate } from '../utils/date'
+import { selectWork } from '../store'
 export default {
   name: 'Datatable',
   data() {
     return {
       headers: [
         {
-          text: 'ID',
-          align: 'start',
-          value: 'id',
-          sortable: false,
-          visible: false
+          text: '#',
+          align: 'left',
+          value: 'index',
+          sortable: true
         },
         {
-          text: 'İş Yapılan Tarih',
-          align: 'start',
+          text: 'Tarih',
+          align: 'center',
           value: 'date',
-          sortable: false
+          sortable: true
         },
         {
           text: 'Usta',
-          align: 'start',
-          value: 'partner',
+          align: 'center',
+          value: 'partner.name',
           sortable: false
         },
         {
           text: 'Şehir',
-          align: 'start',
-          value: 'location',
+          align: 'center',
+          value: 'location.name',
           sortable: false
         },
         {
-          text: 'Sektörler',
-          align: 'start',
-          value: 'sector',
+          text: 'Sektör',
+          align: 'center',
+          value: 'sector.name',
           sortable: false
         },
         {
           text: 'İş Tutarı',
-          align: 'start',
+          align: 'center',
           value: 'amount',
-          sortable: false
+          sortable: true
         },
         {
           text: 'Aksiyon',
-          align: 'start',
+          align: 'center',
           value: 'action',
           sortable: false
         }
@@ -68,6 +93,13 @@ export default {
   },
   computed: {
     ...mapState(['works', 'loading_datatable'])
+  },
+  methods: {
+    formatDate: (date) => formatDate(date),
+    editWork(name, title, work) {
+      this.$store.commit(selectWork, work)
+      this.$store.dispatch('toggleModal', { value: true, name, title })
+    }
   }
 }
 </script>
