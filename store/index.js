@@ -1,4 +1,3 @@
-import API from '@/utils/api'
 import { firstDayOfMount, formatDate, sortDates } from '@/utils/date'
 
 export const setLocations = 'SET_LOCATIONS'
@@ -12,34 +11,9 @@ export const handleSelect = 'HANDLE_SELECT'
 export const toggleModal = 'TOGGLE_MODAL'
 export const handleLoading = 'HANDLE_LOADING'
 export const handleError = 'HANDLE_ERROR'
-export const handleForm = 'HANDLE_FORM'
 
 export const state = () => ({
   locations: ['mersin', 'istanbul'],
-  raw_locations: [
-    { id: 1, name: 'mersin' },
-    { id: 2, name: 'istanbul' }
-  ],
-  raw_sectors: [
-    { id: 1, name: 'klima' },
-    { id: 2, name: 'elektrik' }
-  ],
-  raw_partners: [
-    {
-      id: 1,
-      name: 'ahmet',
-      location: 'mersin',
-      sectors: ['klima', 'elektrik'],
-      phone: '05555555555'
-    },
-    {
-      id: 2,
-      name: 'mehmet',
-      location: 'mersin',
-      sectors: ['klima', 'elektrik'],
-      phone: '05555555555'
-    }
-  ],
   partners: ['ahmet', 'mehmet'],
   sectors: ['klima', 'elektrik'],
   works: [],
@@ -50,38 +24,11 @@ export const state = () => ({
       .substr(0, 10),
     new Date().toISOString().substr(0, 10)
   ],
-  selected_location: '',
-  selected_partner: '',
-  selected_sector: '',
   toggle_modal: false,
   title_modal: 'asdasd',
   name_modal: 'locations',
   loading_datatable: false,
   error_message: null,
-  location_form: {
-    name: ''
-  },
-  sector_form: {
-    name: ''
-  },
-  partner_form: {
-    name: '',
-    phone: '',
-    location: '',
-    sectors: []
-  },
-  ad_form: {
-    date: new Date().toISOString().substr(0, 10),
-    amount: ''
-  },
-  add_work_form: {
-    partner: '',
-    location: '',
-    sector: '',
-    customer_phone: '',
-    amount: '',
-    date: new Date().toISOString().substr(0, 10)
-  }
 })
 
 export const getters = {
@@ -136,13 +83,7 @@ export const actions = {
     commit(handleSelect, payload)
     await dispatch('getWorks')
   },
-  async getLocations({ commit }) {
-    const partners = await API.get('/locations', {})
-    commit(setPartners, partners)
-  },
-  async getSectors({ commit }) {
-    const partners = await API.get('/sectors')
-    commit(setPartners, partners)
+    await dispatch('getData')
   },
   async getPartners({ commit }) {
     const partners = await API.get('/partners')
@@ -154,24 +95,7 @@ export const actions = {
   },
   async getWorks({ state, getters, commit }) {
     commit(handleLoading, { name: 'datatable', value: true })
-    const location = state.raw_locations.find(
-      (item) => item.name === state.selected_location
-    )
-    const sector = state.raw_sectors.find(
-      (item) => item.name === state.selected_sector
-    )
-    const partner = state.raw_partners.find(
-      (item) => item.name === state.selected_partner
-    )
     try {
-      const works = await API.get('/posts', {
-        params: {
-          location_id: location && location.id,
-          sector_id: sector && sector.id,
-          partner_id: partner && partner.id,
-          start: state.selected_dates[0],
-          end: state.selected_dates[1]
-        }
       })
       commit(setWorks, works)
     } catch (error) {
@@ -180,20 +104,6 @@ export const actions = {
     commit(handleLoading, { name: 'datatable', value: false })
   },
   toggleModal({ dispatch, commit }, payload) {
-    const { name } = payload
     commit(toggleModal, payload)
-    if (name === 'locations') dispatch('getLocations')
-    if (name === 'sectors') dispatch('getSectors')
-    if (name === 'partners') {
-      dispatch('getSectors')
-      dispatch('getLocations')
-      dispatch('getPartners')
-    }
-    if (name === 'ads') dispatch('getAds')
-    if (name === 'add_work') {
-      dispatch('getSectors')
-      dispatch('getLocations')
-      dispatch('getPartners')
-    }
   }
 }
