@@ -34,7 +34,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="sector in raw_sectors" :key="sector.id">
+                <tr v-for="sector in sectors" :key="sector.id">
                   <td>{{ sector.name }}</td>
                   <td class="d-flex flex-row justify-center align-center">
                     <!-- <v-btn text fab small color="green">
@@ -57,17 +57,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { handleForm } from '../store'
 
 export default {
   name: 'Sectors',
   computed: {
-    ...mapState(['raw_sectors', 'sector_form'])
+    ...mapState(['sectors', 'sector_form'])
   },
-  methods: {
-    formInput(value, name, key) {
-      this.$store.commit(handleForm, { value, name, key })
-    }
-  }
+  methods: {}
 }
 </script>

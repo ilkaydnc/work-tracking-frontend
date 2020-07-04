@@ -34,7 +34,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="location in raw_locations" :key="location.id">
+                <tr v-for="location in locations" :key="location.id">
                   <td>{{ location.name }}</td>
                   <td class="d-flex flex-row justify-center align-center">
                     <!-- <v-btn text fab small color="green">
@@ -57,16 +57,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { handleForm } from '../store'
 export default {
   name: 'Locations',
   computed: {
-    ...mapState(['raw_locations', 'location_form'])
+    ...mapState(['locations', 'location_form'])
   },
-  methods: {
-    formInput(value, name, key) {
-      this.$store.commit(handleForm, { value, name, key })
-    }
-  }
+  methods: {}
 }
 </script>

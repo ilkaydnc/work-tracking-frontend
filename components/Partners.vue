@@ -25,6 +25,8 @@
           <v-select
             :value="partner_form.location"
             :items="locations"
+            item-text="name"
+            item-value="id"
             label="Şehir Seçiniz*"
             prepend-icon="location_on"
             required
@@ -35,6 +37,8 @@
           <v-select
             :value="partner_form.sectors"
             :items="sectors"
+            item-text="name"
+            item-value="id"
             attach
             prepend-icon="work"
             label="Sektör Seçiniz*"
@@ -68,11 +72,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="partner in raw_partners" :key="partner.id">
+                <tr v-for="partner in partners" :key="partner.id">
                   <td>{{ partner.name }}</td>
-                  <td>{{ partner.location }}</td>
+                  <td>{{ partner.location.name }}</td>
                   <td>{{ partner.phone }}</td>
-                  <td>{{ partner.sectors.join(', ') }}</td>
+                  <td>
+                    {{ partner.sectors.map((item) => item.name).join(', ') }}
+                  </td>
                   <td class="d-flex flex-row justify-center align-center">
                     <!-- <v-btn text fab small color="green">
                       <v-icon>edit</v-icon>
@@ -94,16 +100,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { handleForm } from '../store'
 export default {
   name: 'Partners',
   computed: {
-    ...mapState(['raw_partners', 'locations', 'sectors', 'partner_form'])
+    ...mapState(['partners', 'locations', 'sectors', 'partner_form'])
   },
-  methods: {
-    formInput(value, name, key) {
-      this.$store.commit(handleForm, { value, name, key })
-    }
-  }
+  methods: {}
 }
 </script>

@@ -39,6 +39,29 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <v-select
+            :value="ad_form.location"
+            :items="locations"
+            item-text="name"
+            item-value="id"
+            label="Şehir Seçiniz*"
+            prepend-icon="location_on"
+            required
+            @input="formInput($event, 'add_work', 'location')"
+          />
+        </v-col>
+        <v-col cols="12" sm="12" md="6">
+          <v-select
+            :value="ad_form.sector"
+            :items="sectors"
+            item-text="name"
+            item-value="id"
+            prepend-icon="work"
+            label="Sektör Seçiniz*"
+            @input="formInput($event, 'add_work', 'sector')"
+          />
+        </v-col>
         <v-col />
         <v-col cols="12" sm="12" md="4" align-self="end">
           <v-btn class="my-3" color="primary" block>
@@ -46,6 +69,9 @@
             Ekle
           </v-btn>
         </v-col>
+      </v-row>
+      <v-row>
+        <v-divider class="py-4"></v-divider>
       </v-row>
       <h3>Tüm Reklamlar</h3>
       <v-row>
@@ -84,16 +110,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { handleForm } from '../store'
 export default {
   name: 'Partners',
   computed: {
     ...mapState(['locations', 'sectors', 'partners', 'ad_form'])
   },
-  methods: {
-    formInput(value, name, key) {
-      this.$store.commit(handleForm, { value, name, key })
-    }
-  }
+  methods: {}
 }
 </script>
