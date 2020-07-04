@@ -7,7 +7,6 @@ export const setSectors = 'SET_SECTORS'
 export const setPartners = 'SET_PARTNERS'
 export const setAds = 'SET_ADS'
 export const setWorks = 'SET_WORKS'
-export const setRawData = 'SET_RAW_DATA'
 export const selectWork = 'SELECT_WORK'
 
 export const handleDatePicker = 'HANDLE_DATE_PICKER'
@@ -50,9 +49,6 @@ export const getters = {
 }
 
 export const mutations = {
-  [setRawData]: (state, payload) => {
-    state[payload.name] = payload.value
-  },
   [setLocations]: (state, payload) => {
     state.locations = payload
   },
@@ -92,14 +88,6 @@ export const actions = {
   async handleSelect({ dispatch, commit }, payload) {
     commit(handleSelect, payload)
     await dispatch('getData')
-  },
-  async getPartners({ commit }) {
-    const partners = await API.get('/partners')
-    commit(setPartners, partners)
-  },
-  async getAds({ commit }) {
-    const ads = await API.get('/ads')
-    commit(setAds, ads)
   },
   async getData({ state, commit }) {
     commit(handleLoading, { name: 'datatable', value: true })
