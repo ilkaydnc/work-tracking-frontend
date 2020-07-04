@@ -157,3 +157,11 @@ export const UPDATE_WORK = gql`
     }
   }
 `
+
+export const DELETE_WORK = gql`
+  mutation DeleteWork($id: String!) {
+    deleteWork(id: $id) {
+      id
+    }
+  }
+`

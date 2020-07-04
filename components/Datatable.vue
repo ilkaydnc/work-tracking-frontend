@@ -25,11 +25,19 @@
           small
           icon
           color="primary"
-          @click="editWork('add_work', 'İş Düzenle', item)"
+          @click.stop="editWork('add_work', 'İş Düzenle', item)"
         >
           <v-icon dark>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn depressed class="mx-2" fab small icon color="error">
+        <v-btn
+          depressed
+          class="mx-2"
+          fab
+          small
+          icon
+          color="error"
+          @click.stop="deleteItem(item.id)"
+        >
           <v-icon dark>mdi-delete</v-icon>
         </v-btn>
       </span>
@@ -40,7 +48,9 @@
 <script>
 import { mapState } from 'vuex'
 import { formatDate } from '../utils/date'
-import { selectWork } from '../store'
+import { selectWork, handleError } from '../store'
+import { DELETE_WORK } from '../graphql/queries'
+import graphqlClient from '~/graphql'
 export default {
   name: 'Datatable',
   data() {
@@ -99,6 +109,21 @@ export default {
     editWork(name, title, work) {
       this.$store.commit(selectWork, work)
       this.$store.dispatch('toggleModal', { value: true, name, title })
+    },
+    async deleteItem(id) {
+      if (confirm('Silmek istediğinize emin misiniz?')) {
+        try {
+          await graphqlClient.mutate({
+            mutation: DELETE_WORK,
+            variables: {
+              id
+            }
+          })
+          this.$store.dispatch('getData')
+        } catch (error) {
+          this.$store.commit(handleError, error.message)
+        }
+      }
     }
   }
 }
