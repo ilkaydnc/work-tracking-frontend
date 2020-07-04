@@ -3,7 +3,7 @@
     <v-dialog
       ref="dialog"
       v-model="modal"
-      :return-value.sync="selected_dates"
+      :return-value.sync="filter_dates"
       persistent
       width="350px"
     >
@@ -21,7 +21,7 @@
         ></v-text-field>
       </template>
       <v-date-picker
-        :value="selected_dates"
+        :value="filter_dates"
         locale="tr-TR"
         :max="new Date().toISOString().substr(0, 10)"
         range
@@ -29,37 +29,16 @@
       >
         <v-spacer />
         <v-btn text color="error" @click="modal = false">İptal</v-btn>
-        <v-btn color="primary" @click="closeModal(selected_dates)">
+        <v-btn color="primary" @click="closeModal(filter_dates)">
           Onayla
         </v-btn>
       </v-date-picker>
     </v-dialog>
     <v-select
-      :value="selected_location"
-      item-text="enabled.text"
-      :items="locations"
-      label="Şehir Seç"
-      no-data-text="Şehir bulunamadı."
-      color="purple"
-      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
-      clearable
-      solo
-      @input="handleSelect($event, 'location')"
-    ></v-select>
-    <v-select
-      :value="selected_sector"
-      :items="sectors"
-      label="Sektör Seç"
-      no-data-text="Sektör bulunamadı."
-      color="purple"
-      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
-      clearable
-      solo
-      @input="handleSelect($event, 'sector')"
-    ></v-select>
-    <v-select
-      :value="selected_partner"
+      :value="filter_partner"
       :items="partners"
+      item-text="name"
+      item-value="id"
       label="Usta Seç"
       color="purple"
       no-data-text="Usta bulunamadı."
@@ -67,6 +46,34 @@
       clearable
       solo
       @input="handleSelect($event, 'partner')"
+    >
+    </v-select>
+    <v-select
+      :value="filter_location"
+      :items="locations"
+      item-text="name"
+      item-value="id"
+      label="Şehir Seç"
+      no-data-text="Şehir bulunamadı."
+      color="purple"
+      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+      clearable
+      solo
+      @input="handleSelect($event, 'location')"
+    >
+    </v-select>
+    <v-select
+      :value="filter_sector"
+      :items="sectors"
+      item-text="name"
+      item-value="id"
+      label="Sektör Seç"
+      no-data-text="Sektör bulunamadı."
+      color="purple"
+      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+      clearable
+      solo
+      @input="handleSelect($event, 'sector')"
     ></v-select>
   </div>
 </template>
@@ -83,13 +90,13 @@ export default {
   },
   computed: {
     ...mapState([
-      'selected_dates',
+      'partners',
       'locations',
       'sectors',
-      'partners',
-      'selected_location',
-      'selected_sector',
-      'selected_partner'
+      'filter_dates',
+      'filter_location',
+      'filter_sector',
+      'filter_partner'
     ]),
     ...mapGetters(['date_range_text'])
   },
