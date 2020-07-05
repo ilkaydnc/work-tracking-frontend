@@ -90,7 +90,7 @@
 /* eslint-disable vue/prop-name-casing */
 import { mapState } from 'vuex'
 import { CREATE_WORK, UPDATE_WORK } from '../graphql/queries'
-import { handleError, handleLoading } from '../store'
+import { handleError, handleLoading, selectWork } from '../store'
 import graphqlClient from '~/graphql'
 export default {
   name: 'Partners',
@@ -132,6 +132,7 @@ export default {
         await this.createWork(this)
       }
       this.$store.commit(handleLoading, { name: 'modal', value: false })
+      this.$store.commit(selectWork, undefined)
     },
     async createWork(work) {
       const { partnerId, locationId, sectorId, amount, date } = work
