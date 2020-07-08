@@ -165,3 +165,11 @@ export const DELETE_WORK = gql`
     }
   }
 `
+
+export const DELETE_LOCATION = gql`
+  mutation DeleteLocation($id: String!) {
+    deleteLocation(id: $id) {
+      id
+    }
+  }
+`
