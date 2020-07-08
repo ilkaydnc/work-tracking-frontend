@@ -5,11 +5,10 @@
       <v-row>
         <v-col cols="8" sm="9" md="9">
           <v-text-field
-            :value="sector_form.name"
+            v-model="name"
             label="Sektör Adı Giriniz*"
             prepend-icon="work"
             required
-            @input="formInput($event, 'sector', 'name')"
           ></v-text-field>
         </v-col>
         <v-col cols="4" sm="3" md="3" align-self="center">
@@ -57,12 +56,60 @@
 
 <script>
 import { mapState } from 'vuex'
+import { CREATE_SECTOR, DELETE_SECTOR } from '../graphql/queries'
+import { handleError } from '../store'
+import graphqlClient from '~/graphql'
 
 export default {
   name: 'Sectors',
+  data() {
+    return {
+      name: undefined
+    }
+  },
   computed: {
     ...mapState(['sectors', 'sector_form'])
   },
-  methods: {}
+  methods: {
+    async createLocation() {
+      try {
+        await graphqlClient.mutate({
+          mutation: CREATE_SECTOR,
+          variables: {
+            createLocationInput: {
+              name: this.name
+            }
+          }
+        })
+        this.$store.dispatch('getData')
+        this.$store.dispatch('toggleModal', {
+          value: false,
+          name: null,
+          title: null
+        })
+      } catch (error) {
+        this.$store.commit(handleError, error.message)
+      }
+    },
+    async deleteLocation(id) {
+      if (confirm('Silmek istediğinize emin misiniz?'))
+        try {
+          await graphqlClient.mutate({
+            mutation: DELETE_SECTOR,
+            variables: {
+              id
+            }
+          })
+          this.$store.dispatch('getData')
+          this.$store.dispatch('toggleModal', {
+            value: false,
+            name: null,
+            title: null
+          })
+        } catch (error) {
+          this.$store.commit(handleError, error.message)
+        }
+    }
+  }
 }
 </script>
