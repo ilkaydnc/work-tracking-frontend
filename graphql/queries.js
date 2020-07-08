@@ -173,3 +173,10 @@ export const DELETE_LOCATION = gql`
     }
   }
 `
+export const DELETE_SECTOR = gql`
+  mutation DeleteSector($id: String!) {
+    deleteSector(id: $id) {
+      id
+    }
+  }
+`
