@@ -2,18 +2,18 @@
   <v-card-text>
     <v-container>
       <h3>Şehir Ekle</h3>
-      <v-row>
+      <v-row tag="form" @submit.prevent="createLocation">
         <v-col cols="8" sm="9" md="9">
           <v-text-field
-            :value="location_form.name"
+            v-model="name"
             label="Şehir Adı Giriniz*"
             prepend-icon="location_on"
             required
-            @input="formInput($event, 'location', 'name')"
+            :rules="[(v) => !!v || 'Bu kısım boş bırakılamaz.']"
           ></v-text-field>
         </v-col>
         <v-col cols="4" sm="3" md="3" align-self="center">
-          <v-btn class="my-3" color="primary" block>
+          <v-btn type="submit" class="my-3" color="primary" block>
             <v-icon dark left>add</v-icon>
             Ekle
           </v-btn>
@@ -37,10 +37,13 @@
                 <tr v-for="location in locations" :key="location.id">
                   <td>{{ location.name }}</td>
                   <td class="d-flex flex-row justify-center align-center">
-                    <!-- <v-btn text fab small color="green">
-                      <v-icon>edit</v-icon>
-                    </v-btn> -->
-                    <v-btn text fab small color="error">
+                    <v-btn
+                      text
+                      fab
+                      small
+                      color="error"
+                      @click.stop="deleteLocation(location.id)"
+                    >
                       <v-icon>delete_outline</v-icon>
                     </v-btn>
                   </td>
@@ -57,11 +60,59 @@
 
 <script>
 import { mapState } from 'vuex'
+import { handleError } from '../store'
+import { CREATE_LOCATION, DELETE_LOCATION } from '../graphql/queries'
+import graphqlClient from '~/graphql'
 export default {
   name: 'Locations',
-  computed: {
-    ...mapState(['locations', 'location_form'])
+  data() {
+    return {
+      name: undefined
+    }
   },
-  methods: {}
+  computed: {
+    ...mapState(['locations'])
+  },
+  methods: {
+    async createLocation() {
+      try {
+        await graphqlClient.mutate({
+          mutation: CREATE_LOCATION,
+          variables: {
+            createLocationInput: {
+              name: this.name
+            }
+          }
+        })
+        this.$store.dispatch('getData')
+        this.$store.dispatch('toggleModal', {
+          value: false,
+          name: null,
+          title: null
+        })
+      } catch (error) {
+        this.$store.commit(handleError, error.message)
+      }
+    },
+    async deleteLocation(id) {
+      if (confirm('Silmek istediğinize emin misiniz?'))
+        try {
+          await graphqlClient.mutate({
+            mutation: DELETE_LOCATION,
+            variables: {
+              id
+            }
+          })
+          this.$store.dispatch('getData')
+          this.$store.dispatch('toggleModal', {
+            value: false,
+            name: null,
+            title: null
+          })
+        } catch (error) {
+          this.$store.commit(handleError, error.message)
+        }
+    }
+  }
 }
 </script>
