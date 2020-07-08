@@ -42,6 +42,47 @@
         </v-btn>
       </span>
     </template>
+    <template slot="footer">
+      <v-row class="grey lighten-3 mx-0 black--text">
+        <v-spacer />
+        <div class="col-3 col-md-2 text-right">
+          <span class="font-weight-medium">Genel Toplam</span>
+        </div>
+        <div class="col-3 col-md-1">
+          <span class="body-2">Ciro: </span>
+          {{ statistics.works_total }} TL
+        </div>
+        <div class="col-3 col-md-1">
+          <span class="body-2">Reklam: </span>
+          {{ statistics.ads_total }} TL
+        </div>
+        <div class="col-3 col-md-1">
+          <span class="body-2">Kâr: </span>
+          {{ statistics.works_total - statistics.ads_total }} TL
+        </div>
+        <div class="col-1"></div>
+      </v-row>
+      <v-row class="primary mx-0 white--text">
+        <v-spacer />
+        <div class="col-3 col-md-2 col-md-1 text-right">
+          <span class="font-weight-medium">Seçilenlere Göre Toplam</span>
+        </div>
+        <div class="col-3 col-md-1">
+          <span class="body-2">Ciro: </span>
+          {{ filteredStatistics.works_total }} TL
+        </div>
+        <div v-if="!filter_partner" class="col-3 col-md-1">
+          <span class="body-2">Reklam: </span>
+          {{ filteredStatistics.ads_total }} TL
+        </div>
+        <div v-if="!filter_partner" class="col-3 col-md-1">
+          <span class="body-2">Kâr: </span>
+          {{ filteredStatistics.works_total - filteredStatistics.ads_total }} TL
+        </div>
+        <div v-else class="col-2"></div>
+        <div class="col-1"></div>
+      </v-row>
+    </template>
   </v-data-table>
 </template>
 
@@ -93,7 +134,7 @@ export default {
           sortable: true
         },
         {
-          text: 'Aksiyon',
+          text: '',
           align: 'center',
           value: 'action',
           sortable: false
@@ -102,7 +143,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['works', 'loading_datatable'])
+    ...mapState([
+      'works',
+      'statistics',
+      'filteredStatistics',
+      'loading_datatable',
+      'filter_partner'
+    ])
   },
   methods: {
     formatDate: (date) => formatDate(date),
