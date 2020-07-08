@@ -1,7 +1,10 @@
 import gql from 'graphql-tag'
 
 export const GET_DATA = gql`
-  query GetAllData($filterWorksInput: FilterWorksInput!) {
+  query GetAllData(
+    $filterWorksInput: FilterWorksInput!
+    $filterStatistics: FilterStatisticInput!
+  ) {
     works(filterWorksInput: $filterWorksInput) {
       id
       date
@@ -56,6 +59,15 @@ export const GET_DATA = gql`
         id
         name
       }
+    }
+    statisticsWithFilter(filterStatistics: $filterStatistics) {
+      works_total
+      ads_total
+    }
+
+    statistics {
+      works_total
+      ads_total
     }
   }
 `
