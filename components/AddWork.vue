@@ -157,7 +157,6 @@ export default {
         })
       } catch (error) {
         this.$store.commit(handleError, error.message)
-        throw new Error(error)
       }
     },
     async updateWork(work) {
