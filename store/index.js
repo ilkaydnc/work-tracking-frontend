@@ -7,8 +7,10 @@ export const setSectors = 'SET_SECTORS'
 export const setPartners = 'SET_PARTNERS'
 export const setAds = 'SET_ADS'
 export const setWorks = 'SET_WORKS'
-export const selectWork = 'SELECT_WORK'
+export const setStatistics = 'SET_STATISTICS'
+export const setFilteredStatistics = 'SET_FILTERED_STATISTICS'
 
+export const selectWork = 'SELECT_WORK'
 export const handleDatePicker = 'HANDLE_DATE_PICKER'
 export const handleSelect = 'HANDLE_SELECT'
 export const toggleModal = 'TOGGLE_MODAL'
@@ -21,6 +23,8 @@ export const state = () => ({
   sectors: [],
   works: [],
   ads: [],
+  statistics: {},
+  filteredStatistics: {},
   filter_dates: [
     firstDayOfMount()
       .toISOString()
@@ -61,6 +65,12 @@ export const mutations = {
   [setWorks]: (state, payload) => {
     state.works = payload
   },
+  [setFilteredStatistics]: (state, payload) => {
+    state.filteredStatistics = payload
+  },
+  [setStatistics]: (state, payload) => {
+    state.statistics = payload
+  },
   [handleDatePicker]: (state, payload) => {
     state.filter_dates = sortDates(payload)
   },
@@ -93,11 +103,25 @@ export const actions = {
     commit(handleLoading, { name: 'datatable', value: true })
     try {
       const {
-        data: { works, partners, locations, sectors }
+        data: {
+          works,
+          partners,
+          locations,
+          sectors,
+          statistics,
+          statisticsWithFilter
+        }
       } = await graphqlClient.query({
         query: GET_DATA,
         variables: {
           filterWorksInput: {
+            partnerId: state.filter_partner,
+            locationId: state.filter_location,
+            sectorId: state.filter_sector,
+            startDate: state.filter_dates[0],
+            endDate: state.filter_dates[1] || state.filter_dates[0]
+          },
+          filterStatistics: {
             partnerId: state.filter_partner,
             locationId: state.filter_location,
             sectorId: state.filter_sector,
@@ -114,6 +138,8 @@ export const actions = {
       commit(setPartners, partners)
       commit(setLocations, locations)
       commit(setSectors, sectors)
+      commit(setStatistics, statistics)
+      commit(setFilteredStatistics, statisticsWithFilter)
     } catch (error) {
       commit(handleError, error.message)
     }
