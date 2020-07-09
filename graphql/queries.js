@@ -170,9 +170,35 @@ export const UPDATE_WORK = gql`
   }
 `
 
+export const UPDATE_PARTNER = gql`
+  mutation UpdatePartner($updatePartnerInput: UpdatePartnerInput!) {
+    updatePartner(updatePartnerInput: $updatePartnerInput) {
+      id
+      name
+      phone
+      location {
+        id
+        name
+      }
+      sectors {
+        id
+        name
+      }
+    }
+  }
+`
+
 export const DELETE_WORK = gql`
   mutation DeleteWork($id: String!) {
     deleteWork(id: $id) {
+      id
+    }
+  }
+`
+
+export const DELETE_PARTNER = gql`
+  mutation DeletePartner($id: String!) {
+    deletePartner(id: $id) {
       id
     }
   }
