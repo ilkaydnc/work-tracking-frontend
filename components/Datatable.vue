@@ -43,44 +43,54 @@
       </span>
     </template>
     <template slot="footer">
-      <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text">
-        <v-spacer />
-        <div class="col-3 col-md-2 text-right">
-          <span class="font-weight-medium">Genel Toplam</span>
-        </div>
-        <div class="col-3 col-md-1">
-          <span class="body-2">Ciro: </span>
-          {{ statistics.works_total }} TL
-        </div>
-        <div class="col-3 col-md-1">
-          <span class="body-2">Reklam: </span>
-          {{ statistics.ads_total }} TL
-        </div>
-        <div class="col-3 col-md-1">
-          <span class="body-2">Kâr: </span>
-          {{ statistics.works_total - statistics.ads_total }} TL
-        </div>
-        <div class="col-1"></div>
-      </v-row>
       <v-row v-if="!loading_datatable" class="primary mx-0 white--text">
-        <v-spacer />
-        <div class="col-3 col-md-2 col-md-1 text-right">
+        <v-spacer class="d-none d-sm-flex" />
+        <div class="col-6 col-md-4">
+          <span class="font-weight-medium"></span>
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          <span class="body-2">Ciro</span>
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          <span class="body-2">Reklam</span>
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          <span class="body-2">Kâr</span>
+        </div>
+        <div class="d-none col-sm-1"></div>
+      </v-row>
+      <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text ">
+        <v-spacer class="d-none d-sm-flex" />
+        <div class="col-6 col-md-4 text-left text-sm-right">
           <span class="font-weight-medium">Seçilenlere Göre Toplam</span>
         </div>
-        <div class="col-3 col-md-1">
-          <span class="body-2">Ciro: </span>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
           {{ filteredStatistics.works_total }} TL
         </div>
-        <div v-if="!filter_partner" class="col-3 col-md-1">
-          <span class="body-2">Reklam: </span>
+        <div v-if="!filter_partner" class="col-2 col-md-2 col-lg-1 text-center">
           {{ filteredStatistics.ads_total }} TL
         </div>
-        <div v-if="!filter_partner" class="col-3 col-md-1">
-          <span class="body-2">Kâr: </span>
+        <div v-if="!filter_partner" class="col-2 col-md-2 col-lg-1 text-center">
           {{ filteredStatistics.works_total - filteredStatistics.ads_total }} TL
         </div>
         <div v-else class="col-2"></div>
-        <div class="col-1"></div>
+        <div class="d-none col-sm-1"></div>
+      </v-row>
+      <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text">
+        <v-spacer />
+        <div class="col-6 col-md-4 text-left text-sm-right">
+          <span class="font-weight-medium">Genel Toplam</span>
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          {{ statistics.works_total }} TL
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          {{ statistics.ads_total }} TL
+        </div>
+        <div class="col-2 col-md-2 col-lg-1 text-center">
+          {{ statistics.works_total - statistics.ads_total }} TL
+        </div>
+        <div class="d-none col-sm-1"></div>
       </v-row>
     </template>
   </v-data-table>
