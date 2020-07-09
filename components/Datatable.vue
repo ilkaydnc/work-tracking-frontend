@@ -43,7 +43,7 @@
       </span>
     </template>
     <template slot="footer">
-      <v-row class="grey lighten-3 mx-0 black--text">
+      <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text">
         <v-spacer />
         <div class="col-3 col-md-2 text-right">
           <span class="font-weight-medium">Genel Toplam</span>
@@ -62,7 +62,7 @@
         </div>
         <div class="col-1"></div>
       </v-row>
-      <v-row class="primary mx-0 white--text">
+      <v-row v-if="!loading_datatable" class="primary mx-0 white--text">
         <v-spacer />
         <div class="col-3 col-md-2 col-md-1 text-right">
           <span class="font-weight-medium">Seçilenlere Göre Toplam</span>
