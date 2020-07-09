@@ -81,7 +81,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <small>Yanında * olanlar zorunludur.</small>
   </v-card-text>
 </template>
 
@@ -127,15 +126,15 @@ export default {
       if (!partnerId && !sectorId && !amount && !date) return
       this.$store.commit(handleLoading, { name: 'modal', value: true })
       if (this.isEdit) {
-        await this.updateWork(this)
+        await this.updateWork()
       } else {
-        await this.createWork(this)
+        await this.createWork()
       }
       this.$store.commit(handleLoading, { name: 'modal', value: false })
       this.$store.commit(selectWork, undefined)
     },
-    async createWork(work) {
-      const { partnerId, locationId, sectorId, amount, date } = work
+    async createWork() {
+      const { partnerId, locationId, sectorId, amount, date } = this
       try {
         await graphqlClient.mutate({
           mutation: CREATE_WORK,
@@ -159,8 +158,8 @@ export default {
         this.$store.commit(handleError, error.message)
       }
     },
-    async updateWork(work) {
-      const { partnerId, locationId, sectorId, amount, date } = work
+    async updateWork() {
+      const { partnerId, locationId, sectorId, amount, date } = this
       try {
         await graphqlClient.mutate({
           mutation: UPDATE_WORK,
