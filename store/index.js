@@ -65,6 +65,9 @@ export const mutations = {
   [setWorks]: (state, payload) => {
     state.works = payload
   },
+  [setAds]: (state, payload) => {
+    state.ads = payload
+  },
   [setFilteredStatistics]: (state, payload) => {
     state.filteredStatistics = payload
   },
@@ -108,6 +111,7 @@ export const actions = {
           partners,
           locations,
           sectors,
+          ads,
           statistics,
           statisticsWithFilter
         }
@@ -138,6 +142,7 @@ export const actions = {
       commit(setPartners, partners)
       commit(setLocations, locations)
       commit(setSectors, sectors)
+      commit(setAds, ads)
       commit(setStatistics, statistics)
       commit(setFilteredStatistics, statisticsWithFilter)
     } catch (error) {
