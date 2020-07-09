@@ -1,12 +1,6 @@
 <template>
   <div class="d-flex flex-wrap flex-lg-nowrap col-12">
-    <v-dialog
-      ref="dialog"
-      v-model="modal"
-      :return-value.sync="filter_dates"
-      persistent
-      width="350px"
-    >
+    <v-dialog ref="dialog" v-model="modal" persistent width="350px">
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
           :value="date_range_text"
