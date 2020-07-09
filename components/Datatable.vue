@@ -57,7 +57,6 @@
         <div class="col-2 col-md-2 col-lg-1 text-center">
           <span class="body-2">Kâr</span>
         </div>
-        <div class="d-none col-sm-1"></div>
       </v-row>
       <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text ">
         <v-spacer class="d-none d-sm-flex" />
@@ -74,7 +73,6 @@
           {{ filteredStatistics.works_total - filteredStatistics.ads_total }} TL
         </div>
         <div v-else class="col-2"></div>
-        <div class="d-none col-sm-1"></div>
       </v-row>
       <v-row v-if="!loading_datatable" class="grey lighten-3 mx-0 black--text">
         <v-spacer />
@@ -90,7 +88,6 @@
         <div class="col-2 col-md-2 col-lg-1 text-center">
           {{ statistics.works_total - statistics.ads_total }} TL
         </div>
-        <div class="d-none col-sm-1"></div>
       </v-row>
     </template>
   </v-data-table>
