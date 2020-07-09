@@ -44,7 +44,7 @@
                       color="error"
                       @click.stop="deleteLocation(location.id)"
                     >
-                      <v-icon>delete_outline</v-icon>
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </td>
                 </tr>

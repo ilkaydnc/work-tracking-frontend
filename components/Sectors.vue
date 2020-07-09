@@ -40,7 +40,7 @@
                       <v-icon>edit</v-icon>
                     </v-btn> -->
                     <v-btn text fab small color="error">
-                      <v-icon>delete_outline</v-icon>
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </td>
                 </tr>
