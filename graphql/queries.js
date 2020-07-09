@@ -188,6 +188,24 @@ export const UPDATE_PARTNER = gql`
   }
 `
 
+export const UPDATE_AD = gql`
+  mutation UpdateAd($updateAdInput: UpdateAdInput!) {
+    updateAd(updateAdInput: $updateAdInput) {
+      id
+      date
+      amount
+      location {
+        id
+        name
+      }
+      sector {
+        id
+        name
+      }
+    }
+  }
+`
+
 export const DELETE_WORK = gql`
   mutation DeleteWork($id: String!) {
     deleteWork(id: $id) {
@@ -211,9 +229,18 @@ export const DELETE_LOCATION = gql`
     }
   }
 `
+
 export const DELETE_SECTOR = gql`
   mutation DeleteSector($id: String!) {
     deleteSector(id: $id) {
+      id
+    }
+  }
+`
+
+export const DELETE_AD = gql`
+  mutation DeleteAd($id: String!) {
+    deleteAd(id: $id) {
       id
     }
   }
