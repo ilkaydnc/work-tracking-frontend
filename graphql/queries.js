@@ -100,7 +100,7 @@ export const CREATE_PARTNER = gql`
         id
         name
       }
-      sector {
+      sectors {
         id
         name
       }
