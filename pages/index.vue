@@ -47,6 +47,7 @@ import Modal from '@/components/Modal'
 
 export default {
   name: 'Home',
+  middleware: 'authenticated',
   components: {
     TopBar,
     Datatable,
