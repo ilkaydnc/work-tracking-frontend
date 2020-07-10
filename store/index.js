@@ -1,7 +1,9 @@
 import { firstDayOfMount, formatDate, sortDates } from '@/utils/date'
 import graphqlClient from '~/graphql'
-import { GET_DATA } from '~/graphql/queries'
+import { GET_DATA, SIGN_IN } from '~/graphql/queries'
 
+export const setAuth = 'SET_AUTHENTICATED'
+export const setUser = 'SET_USER'
 export const setLocations = 'SET_LOCATIONS'
 export const setSectors = 'SET_SECTORS'
 export const setPartners = 'SET_PARTNERS'
@@ -53,6 +55,12 @@ export const getters = {
 }
 
 export const mutations = {
+  [setAuth]: (state, payload) => {
+    state.authenticated = payload
+  },
+  [setUser]: (state, payload) => {
+    state.user = payload
+  },
   [setLocations]: (state, payload) => {
     state.locations = payload
   },
@@ -152,5 +160,31 @@ export const actions = {
   },
   toggleModal({ dispatch, commit }, payload) {
     commit(toggleModal, payload)
+  async signIn({ dispatch, commit, redirect }, payload) {
+    const { email, password } = payload
+
+    try {
+      const { data } = await graphqlClient.mutate({
+        mutation: SIGN_IN,
+        variables: {
+          signInInput: {
+            email,
+            password
+          }
+        }
+      })
+
+      const { signIn } = data
+
+      localStorage.setItem('token', signIn.token)
+      commit(setUser, signIn)
+      commit(setAuth, true)
+      commit(handleError, undefined)
+      this.$router.push('/')
+    } catch (error) {
+      window.location.reload()
+      commit(handleError, error.message)
+    }
+  },
   }
 }
