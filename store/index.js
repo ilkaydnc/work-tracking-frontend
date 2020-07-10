@@ -2,6 +2,7 @@ import { firstDayOfMount, formatDate, sortDates } from '@/utils/date'
 import graphqlClient from '~/graphql'
 import { GET_DATA, SIGN_IN } from '~/graphql/queries'
 
+export const setAppLoading = 'SET_APP_LOADING'
 export const setAuth = 'SET_AUTHENTICATED'
 export const setUser = 'SET_USER'
 export const setLocations = 'SET_LOCATIONS'
@@ -20,6 +21,7 @@ export const handleLoading = 'HANDLE_LOADING'
 export const handleError = 'HANDLE_ERROR'
 
 export const state = () => ({
+  loading: true,
   authenticated: false,
   user: {
     token: localStorage.getItem('token')
@@ -59,6 +61,9 @@ export const getters = {
 }
 
 export const mutations = {
+  [setAppLoading]: (state, payload) => {
+    state.loading = payload
+  },
   [setAuth]: (state, payload) => {
     state.authenticated = payload
   },
@@ -162,6 +167,7 @@ export const actions = {
       window.location.reload()
       commit(handleError, error.message)
     }
+    commit(setAppLoading, false)
     commit(handleLoading, { name: 'datatable', value: false })
   },
   toggleModal({ commit }, payload) {

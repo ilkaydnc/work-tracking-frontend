@@ -1,5 +1,17 @@
 <template>
   <v-app>
+    <v-overlay
+      :value="$store.state.loading"
+      color="white"
+      opacity="1"
+      z-index="100"
+    >
+      <v-progress-circular
+        color="primary"
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
     <v-navigation-drawer
       v-model="drawer"
       class="d-flex d-sm-none"

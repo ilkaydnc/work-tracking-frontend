@@ -55,7 +55,7 @@
 <script>
 import { mapState } from 'vuex'
 import { CURRENT_USER } from '../graphql/queries'
-import { setAuth, setUser } from '../store'
+import { setAuth, setUser, setAppLoading } from '../store'
 import graphqlClient from '~/graphql'
 export default {
   name: 'Login',
@@ -78,7 +78,9 @@ export default {
       this.$store.commit(setAuth, true)
       this.$store.commit(setUser, data.me)
       this.$router.push('/')
-    } catch (error) {}
+    } catch (error) {
+      this.$store.commit(setAppLoading, false)
+    }
   },
   methods: {
     login() {
