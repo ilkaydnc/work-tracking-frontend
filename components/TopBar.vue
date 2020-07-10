@@ -10,7 +10,7 @@
           depressed
           :color="button.color"
           class="mx-2"
-          @click.prevent="openModal(button.name, button.text)"
+          @click.stop="openModal(button.name, button.text)"
         >
           {{ button.text }}
           <v-icon style="margin-left: 10px">{{ button.icon }}</v-icon>
