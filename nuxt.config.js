@@ -7,7 +7,7 @@ export default {
    */
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: 'Work Tracking App',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -49,7 +49,6 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    '@nuxtjs/auth',
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
@@ -83,19 +82,5 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  },
-
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: 'https://google.com/auth/login',
-            method: 'post',
-            propertyName: 'token'
-          }
-        }
-      }
-    }
   }
 }
