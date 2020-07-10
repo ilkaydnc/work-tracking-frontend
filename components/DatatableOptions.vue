@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-wrap flex-lg-nowrap col-12">
+  <div class="d-flex flex-wrap flex-lg-nowrap col-12 pa-0 pa-md-3">
     <v-dialog ref="dialog" v-model="modal" persistent width="350px">
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
@@ -7,7 +7,7 @@
           label="Tarih Araligi"
           append-icon="mdi-menu-down"
           color="purple"
-          class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+          class="col-12 col-sm-12 col-md-6 col-lg-3 px-0 px-sm-4"
           readonly
           v-bind="attrs"
           solo
@@ -36,7 +36,7 @@
       label="Usta Seç"
       color="purple"
       no-data-text="Usta bulunamadı."
-      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+      class="col-12 col-sm-12 col-md-6 col-lg-3 px-0 px-sm-4"
       clearable
       solo
       @input="handleSelect($event, 'partner')"
@@ -50,7 +50,7 @@
       label="Şehir Seç"
       no-data-text="Şehir bulunamadı."
       color="purple"
-      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+      class="col-12 col-sm-12 col-md-6 col-lg-3 px-0 px-sm-4"
       clearable
       solo
       @input="handleSelect($event, 'location')"
@@ -64,7 +64,7 @@
       label="Sektör Seç"
       no-data-text="Sektör bulunamadı."
       color="purple"
-      class="col-12 col-sm-12 col-md-6 col-lg-3 px-4"
+      class="col-12 col-sm-12 col-md-6 col-lg-3 px-0 px-sm-4"
       clearable
       solo
       @input="handleSelect($event, 'sector')"
