@@ -5,20 +5,48 @@
       class="d-flex d-sm-none"
       absolute
       temporary
+      style="position: fixed; top: 0;"
     >
-      <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" link>
+      <v-list light>
+        <v-subheader>SEÇENEKLER</v-subheader>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          :class="item.name === 'add_work' ? `${item.color}` : ''"
+          link
+          @click.stop="openModal(item.name, item.title)"
+        >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon
+              :class="
+                item.name === 'add_work' ? `white--text` : `${item.color}--text`
+              "
+            >
+              {{ item.icon }}</v-icon
+            >
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title
+              :class="
+                item.name === 'add_work' ? `white--text` : `${item.color}--text`
+              "
+              >{{ item.title }}</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn class="error" block @click="$store.dispatch('logout')">
+            Çıkış Yap
+            <v-icon style="margin-left: 10px">login</v-icon>
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar
+      v-if="$route.path !== '/login'"
       :clipped-left="clipped"
       fixed
       app
@@ -39,8 +67,22 @@
         >
       </v-toolbar-title>
       <v-spacer />
-      <v-btn v-if="!$auth.loggedId" text color="white" to="/login">
+      <v-toolbar-title
+        v-if="$store.state.authenticated"
+        class="d-none d-md-block mr-4"
+      >
+        {{ $store.state.user.name }}
+      </v-toolbar-title>
+      <v-btn v-if="!$store.state.authenticated" text color="white" to="/login">
         Giriş Yap
+        <v-icon style="margin-left: 10px">login</v-icon>
+      </v-btn>
+      <v-btn
+        v-else
+        class="d-none d-sm-block white black--text"
+        @click="$store.dispatch('logout')"
+      >
+        Çıkış Yap
         <v-icon style="margin-left: 10px">login</v-icon>
       </v-btn>
     </v-app-bar>
@@ -62,20 +104,46 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          name: 'locations',
+          color: 'purple',
+          title: 'Şehirler',
+          icon: 'location_on'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          name: 'sectors',
+          color: 'orange',
+          title: 'Sektörler',
+          icon: 'business_center'
+        },
+        {
+          name: 'partners',
+          color: 'indigo',
+          title: 'Ustalar',
+          icon: 'person'
+        },
+        {
+          name: 'ads',
+          color: 'success',
+          title: 'Reklamlar',
+          icon: 'insert_chart_outlined'
+        },
+        {
+          name: 'add_work',
+          color: 'primary',
+          title: 'İş Ekle',
+          icon: 'local_atm'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    openModal(name, title) {
+      this.drawer = false
+      this.$store.dispatch('toggleModal', { value: true, name, title })
     }
   }
 }
