@@ -1,5 +1,27 @@
 import gql from 'graphql-tag'
 
+export const CURRENT_USER = gql`
+  query GetCurrentUser {
+    me {
+      id
+      name
+      email
+      token
+    }
+  }
+`
+
+export const SIGN_IN = gql`
+  mutation SignIn($signInInput: SignInInput!) {
+    signIn(signInInput: $signInInput) {
+      id
+      name
+      email
+      token
+    }
+  }
+`
+
 export const GET_DATA = gql`
   query GetAllData(
     $filterWorksInput: FilterWorksInput!
