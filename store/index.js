@@ -20,6 +20,10 @@ export const handleLoading = 'HANDLE_LOADING'
 export const handleError = 'HANDLE_ERROR'
 
 export const state = () => ({
+  authenticated: false,
+  user: {
+    token: localStorage.getItem('token')
+  },
   partners: [],
   locations: [],
   sectors: [],
@@ -153,13 +157,16 @@ export const actions = {
       commit(setAds, ads)
       commit(setStatistics, statistics)
       commit(setFilteredStatistics, statisticsWithFilter)
+      commit(handleError, undefined)
     } catch (error) {
+      window.location.reload()
       commit(handleError, error.message)
     }
     commit(handleLoading, { name: 'datatable', value: false })
   },
-  toggleModal({ dispatch, commit }, payload) {
+  toggleModal({ commit }, payload) {
     commit(toggleModal, payload)
+  },
   async signIn({ dispatch, commit, redirect }, payload) {
     const { email, password } = payload
 
@@ -186,5 +193,10 @@ export const actions = {
       commit(handleError, error.message)
     }
   },
+  logout({ commit }) {
+    localStorage.setItem('token', undefined)
+    commit(setUser, {})
+    commit(setAuth, false)
+    this.$router.push('/login')
   }
 }
