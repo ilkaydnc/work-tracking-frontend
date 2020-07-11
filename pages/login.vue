@@ -61,8 +61,8 @@ export default {
   name: 'Login',
   data() {
     return {
-      email: 'ilkay@mail.com',
-      password: '123456789',
+      email: undefined,
+      password: undefined,
       valid: true
     }
   },
