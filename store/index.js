@@ -164,7 +164,6 @@ export const actions = {
       commit(setFilteredStatistics, statisticsWithFilter)
       commit(handleError, undefined)
     } catch (error) {
-      window.location.reload()
       commit(handleError, error.message)
     }
     commit(setAppLoading, false)
@@ -195,7 +194,6 @@ export const actions = {
       commit(handleError, undefined)
       this.$router.push('/')
     } catch (error) {
-      window.location.reload()
       commit(handleError, error.message)
     }
   },

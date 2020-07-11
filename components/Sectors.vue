@@ -36,10 +36,13 @@
                 <tr v-for="sector in sectors" :key="sector.id">
                   <td>{{ sector.name }}</td>
                   <td class="d-flex flex-row justify-center align-center">
-                    <!-- <v-btn text fab small color="green">
-                      <v-icon>edit</v-icon>
-                    </v-btn> -->
-                    <v-btn text fab small color="error">
+                    <v-btn
+                      text
+                      fab
+                      small
+                      color="error"
+                      @click.stop="deleteSector(sector.id)"
+                    >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </td>
@@ -71,12 +74,12 @@ export default {
     ...mapState(['sectors', 'sector_form'])
   },
   methods: {
-    async createLocation() {
+    async createSector() {
       try {
         await graphqlClient.mutate({
           mutation: CREATE_SECTOR,
           variables: {
-            createLocationInput: {
+            createSectorInput: {
               name: this.name
             }
           }
@@ -88,11 +91,10 @@ export default {
           title: null
         })
       } catch (error) {
-        window.location.reload()
         this.$store.commit(handleError, error.message)
       }
     },
-    async deleteLocation(id) {
+    async deleteSector(id) {
       if (confirm('Silmek istediğinize emin misiniz?'))
         try {
           await graphqlClient.mutate({
@@ -108,7 +110,6 @@ export default {
             title: null
           })
         } catch (error) {
-          window.location.reload()
           this.$store.commit(handleError, error.message)
         }
     }

@@ -155,7 +155,6 @@ export default {
           title: null
         })
       } catch (error) {
-        window.location.reload()
         this.$store.commit(handleError, error.message)
       }
     },
@@ -182,7 +181,6 @@ export default {
           title: null
         })
       } catch (error) {
-        window.location.reload()
         this.$store.commit(handleError, error.message)
       }
     }

@@ -175,7 +175,6 @@ export default {
           })
           this.$store.dispatch('getData')
         } catch (error) {
-          window.location.reload()
           this.$store.commit(handleError, error.message)
         }
       }

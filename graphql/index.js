@@ -24,8 +24,11 @@ const authLink = setContext((_, { headers }) => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ extensions }) => {
-      if (extensions.exception.response.status === 401) {
-        localStorage.setItem('token', undefined)
+      if (
+        extensions.exception.status === 401 &&
+        window.location.pathname !== '/login'
+      ) {
+        localStorage.setItem('token', '')
         window.location.reload()
       }
     })
